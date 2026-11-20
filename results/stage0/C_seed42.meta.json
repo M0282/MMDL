@@ -1,0 +1,31 @@
+{
+  "condition": "C",
+  "prompt_mode": "cot",
+  "max_new_tokens": 2048,
+  "max_pixels": 4014080,
+  "min_pixels": 200704,
+  "seed": 42,
+  "model_path": "Qwen/Qwen3-VL-4B-Instruct",
+  "model_revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+  "data_revision": "98e6ac0cb9b7b2cd2c991b85a50762edc4aedc68",
+  "backend": "transformers-batched",
+  "batch_size": 48,
+  "effective_image_processor": "{'min_pixels': None, 'max_pixels': None, 'size': {'longest_edge': 4014080, 'shortest_edge': 200704}, 'patch_size': 16}",
+  "n_samples": 900,
+  "n_correct": 539,
+  "micro_acc": 0.5988888888888889,
+  "micro_acc_official_parser": 0.4922222222222222,
+  "elapsed_sec": 7738.8,
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+  "peak_vram_gb": 61.18,
+  "torch": "2.10.0+cu128",
+  "sampling": {
+    "do_sample": true,
+    "temperature": 0.7,
+    "top_p": 0.8,
+    "top_k": 20,
+    "repetition_penalty": 1.0,
+    "presence_penalty": 1.5
+  },
+  "transformers": "5.2.0"
+}
