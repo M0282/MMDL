@@ -1,0 +1,328 @@
+[E9] GPU: NVIDIA L4
+[E9] 이미지 색인 만드는 중...
+[E9]   이미지 21298개 색인
+[E9] 모델 로드 중...
+Loading weights: 100% 713/713 [00:02<00:00, 343.60it/s]
+/usr/local/lib/python3.13/dist-packages/peft/import_utils.py:195: UserWarning: Found an incompatible version of torchao. Found version 0.10.0, but only versions above 0.16.0 are supported. torchao support in PEFT is disabled; if you want to use a torchao-quantized model with PEFT, please upgrade torchao.
+  warnings.warn(
+/usr/local/lib/python3.13/dist-packages/transformers/modeling_utils.py:3195: FutureWarning: `gradient_checkpointing_enable` is deprecated and will be removed in v6. Use `activation_checkpointing_enable` instead.
+  warnings.warn(
+[E9] LoRA 학습 파라미터 11.8M · max_pixels=602112 · max_len=4096
+[E9] 학습 문항 5888개 (이미지 못 찾아 건너뜀 0개)
+[E9] 학습 시작: 1.0에폭 ≈ 5888스텝, grad_accum 8
+/usr/local/lib/python3.13/dist-packages/transformers/models/qwen2_vl/image_processing_qwen2_vl.py:129: FutureWarning: Passing `min_pixels` and `max_pixels` to a processor call is deprecated and will be removed in v5.23. Pass in `size={'longest_edge': xxx, 'shortest_edge': xxx} to override the target size.`
+  warnings.warn(
+[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+[E9]   step 0/5888  loss=4.142  0.0분  VRAM 10.5GB
+[E9]   step 20/5888  loss=2.465  0.2분  VRAM 10.8GB
+[E9]   step 40/5888  loss=0.787  0.5분  VRAM 10.8GB
+[E9]   step 60/5888  loss=0.419  0.7분  VRAM 10.9GB
+[E9]   step 80/5888  loss=0.378  0.9분  VRAM 10.9GB
+[E9]   step 100/5888  loss=0.481  1.1분  VRAM 10.9GB
+[E9]   step 120/5888  loss=0.208  1.3분  VRAM 10.9GB
+[E9]   step 140/5888  loss=0.185  1.6분  VRAM 10.9GB
+[E9]   step 160/5888  loss=0.127  1.8분  VRAM 10.9GB
+[E9]   step 180/5888  loss=0.225  2.0분  VRAM 10.9GB
+[E9]   step 200/5888  loss=0.231  2.2분  VRAM 10.9GB
+[E9]   step 220/5888  loss=0.179  2.4분  VRAM 10.9GB
+[E9]   step 240/5888  loss=0.223  2.6분  VRAM 10.9GB
+[E9]   step 260/5888  loss=0.175  2.9분  VRAM 10.9GB
+[E9]   step 280/5888  loss=0.181  3.1분  VRAM 10.9GB
+[E9]   step 300/5888  loss=0.188  3.3분  VRAM 10.9GB
+[E9]   step 320/5888  loss=0.193  3.5분  VRAM 10.9GB
+[E9]   step 340/5888  loss=0.158  3.7분  VRAM 10.9GB
+[E9]   step 360/5888  loss=0.190  4.0분  VRAM 10.9GB
+[E9]   step 380/5888  loss=0.175  4.2분  VRAM 10.9GB
+[E9]   step 400/5888  loss=0.166  4.4분  VRAM 10.9GB
+[E9]   step 420/5888  loss=0.134  4.6분  VRAM 10.9GB
+[E9]   step 440/5888  loss=0.183  4.8분  VRAM 10.9GB
+[E9]   step 460/5888  loss=0.201  5.1분  VRAM 10.9GB
+[E9]   step 480/5888  loss=0.148  5.3분  VRAM 10.9GB
+[E9]   step 500/5888  loss=0.082  5.5분  VRAM 10.9GB
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[E9]   중간 저장 → /content/drive/MyDrive/adapter_A
+[E9]   step 520/5888  loss=0.157  5.7분  VRAM 10.9GB
+[E9]   step 540/5888  loss=0.280  6.0분  VRAM 10.9GB
+[E9]   step 560/5888  loss=0.165  6.2분  VRAM 10.9GB
+[E9]   step 580/5888  loss=0.176  6.4분  VRAM 10.9GB
+[E9]   step 600/5888  loss=0.124  6.6분  VRAM 10.9GB
+[E9]   step 620/5888  loss=0.142  6.8분  VRAM 10.9GB
+[E9]   step 640/5888  loss=0.057  7.1분  VRAM 10.9GB
+[E9]   step 660/5888  loss=0.123  7.3분  VRAM 10.9GB
+[E9]   step 680/5888  loss=0.151  7.5분  VRAM 10.9GB
+[E9]   step 700/5888  loss=0.193  7.7분  VRAM 10.9GB
+[E9]   step 720/5888  loss=0.176  8.0분  VRAM 10.9GB
+[E9]   step 740/5888  loss=0.169  8.2분  VRAM 10.9GB
+[E9]   step 760/5888  loss=0.250  8.4분  VRAM 10.9GB
+[E9]   step 780/5888  loss=0.118  8.6분  VRAM 10.9GB
+[E9]   step 800/5888  loss=0.234  8.9분  VRAM 10.9GB
+[E9]   step 820/5888  loss=0.187  9.1분  VRAM 10.9GB
+[E9]   step 840/5888  loss=0.124  9.3분  VRAM 10.9GB
+[E9]   step 860/5888  loss=0.156  9.5분  VRAM 10.9GB
+[E9]   step 880/5888  loss=0.118  9.8분  VRAM 10.9GB
+[E9]   step 900/5888  loss=0.334  10.0분  VRAM 10.9GB
+[E9]   step 920/5888  loss=0.156  10.2분  VRAM 10.9GB
+[E9]   step 940/5888  loss=0.108  10.4분  VRAM 10.9GB
+[E9]   step 960/5888  loss=0.236  10.7분  VRAM 10.9GB
+[E9]   step 980/5888  loss=0.153  10.9분  VRAM 10.9GB
+[E9]   step 1000/5888  loss=0.177  11.1분  VRAM 10.9GB
+[E9]   중간 저장 → /content/drive/MyDrive/adapter_A
+[E9]   step 1020/5888  loss=0.148  11.3분  VRAM 10.9GB
+[E9]   step 1040/5888  loss=0.144  11.6분  VRAM 10.9GB
+[E9]   step 1060/5888  loss=0.208  11.8분  VRAM 10.9GB
+[E9]   step 1080/5888  loss=0.203  12.0분  VRAM 10.9GB
+[E9]   step 1100/5888  loss=0.270  12.2분  VRAM 10.9GB
+[E9]   step 1120/5888  loss=0.228  12.4분  VRAM 10.9GB
+[E9]   step 1140/5888  loss=0.131  12.7분  VRAM 10.9GB
+[E9]   step 1160/5888  loss=0.136  12.9분  VRAM 10.9GB
+[E9]   step 1180/5888  loss=0.139  13.1분  VRAM 10.9GB
+[E9]   step 1200/5888  loss=0.125  13.3분  VRAM 10.9GB
+[E9]   step 1220/5888  loss=0.153  13.6분  VRAM 10.9GB
+[E9]   step 1240/5888  loss=0.187  13.8분  VRAM 10.9GB
+[E9]   step 1260/5888  loss=0.179  14.0분  VRAM 10.9GB
+[E9]   step 1280/5888  loss=0.192  14.2분  VRAM 10.9GB
+[E9]   step 1300/5888  loss=0.153  14.5분  VRAM 10.9GB
+[E9]   step 1320/5888  loss=0.203  14.7분  VRAM 10.9GB
+[E9]   step 1340/5888  loss=0.249  14.9분  VRAM 10.9GB
+[E9]   step 1360/5888  loss=0.152  15.1분  VRAM 10.9GB
+[E9]   step 1380/5888  loss=0.126  15.4분  VRAM 10.9GB
+[E9]   step 1400/5888  loss=0.212  15.6분  VRAM 10.9GB
+[E9]   step 1420/5888  loss=0.170  15.8분  VRAM 10.9GB
+[E9]   step 1440/5888  loss=0.123  16.0분  VRAM 10.9GB
+[E9]   step 1460/5888  loss=0.179  16.3분  VRAM 10.9GB
+[E9]   step 1480/5888  loss=0.106  16.5분  VRAM 10.9GB
+[E9]   step 1500/5888  loss=0.219  16.7분  VRAM 10.9GB
+[E9]   중간 저장 → /content/drive/MyDrive/adapter_A
+[E9]   step 1520/5888  loss=0.127  17.0분  VRAM 10.9GB
+[E9]   step 1540/5888  loss=0.214  17.2분  VRAM 10.9GB
+[E9]   step 1560/5888  loss=0.103  17.4분  VRAM 10.9GB
+[E9]   step 1580/5888  loss=0.072  17.6분  VRAM 11.0GB
+[E9]   step 1600/5888  loss=0.132  17.8분  VRAM 11.0GB
+[E9]   step 1620/5888  loss=0.101  18.1분  VRAM 11.0GB
+[E9]   step 1640/5888  loss=0.210  18.3분  VRAM 11.0GB
+[E9]   step 1660/5888  loss=0.166  18.5분  VRAM 11.0GB
+[E9]   step 1680/5888  loss=0.233  18.7분  VRAM 11.0GB
+[E9]   step 1700/5888  loss=0.124  19.0분  VRAM 11.0GB
+[E9]   step 1720/5888  loss=0.164  19.2분  VRAM 11.0GB
+[E9]   step 1740/5888  loss=0.129  19.4분  VRAM 11.0GB
+[E9]   step 1760/5888  loss=0.173  19.6분  VRAM 11.0GB
+[E9]   step 1780/5888  loss=0.147  19.9분  VRAM 11.0GB
+[E9]   step 1800/5888  loss=0.355  20.1분  VRAM 11.0GB
+[E9]   step 1820/5888  loss=0.142  20.3분  VRAM 11.0GB
+[E9]   step 1840/5888  loss=0.178  20.5분  VRAM 11.0GB
+[E9]   step 1860/5888  loss=0.161  20.7분  VRAM 11.0GB
+[E9]   step 1880/5888  loss=0.146  21.0분  VRAM 11.0GB
+[E9]   step 1900/5888  loss=0.219  21.2분  VRAM 11.0GB
+[E9]   step 1920/5888  loss=0.123  21.4분  VRAM 11.2GB
+[E9]   step 1940/5888  loss=0.187  21.6분  VRAM 11.2GB
+[E9]   step 1960/5888  loss=0.113  21.9분  VRAM 11.2GB
+[E9]   step 1980/5888  loss=0.172  22.1분  VRAM 11.2GB
+[E9]   step 2000/5888  loss=0.073  22.3분  VRAM 11.2GB
+[E9]   중간 저장 → /content/drive/MyDrive/adapter_A
+[E9]   step 2020/5888  loss=0.171  22.6분  VRAM 11.2GB
+[E9]   step 2040/5888  loss=0.183  22.8분  VRAM 11.2GB
+[E9]   step 2060/5888  loss=0.113  23.0분  VRAM 11.2GB
+[E9]   step 2080/5888  loss=0.110  23.2분  VRAM 11.2GB
+[E9]   step 2100/5888  loss=0.117  23.4분  VRAM 11.2GB
+[E9]   step 2120/5888  loss=0.567  23.7분  VRAM 11.2GB
+[E9]   step 2140/5888  loss=0.194  23.9분  VRAM 11.2GB
+[E9]   step 2160/5888  loss=0.312  24.1분  VRAM 11.2GB
+[E9]   step 2180/5888  loss=0.085  24.3분  VRAM 11.2GB
+[E9]   step 2200/5888  loss=0.117  24.6분  VRAM 11.2GB
+[E9]   step 2220/5888  loss=0.234  24.8분  VRAM 11.2GB
+[E9]   step 2240/5888  loss=0.160  25.0분  VRAM 11.2GB
+[E9]   step 2260/5888  loss=0.142  25.2분  VRAM 11.2GB
+[E9]   step 2280/5888  loss=0.199  25.5분  VRAM 11.2GB
+[E9]   step 2300/5888  loss=0.142  25.7분  VRAM 11.2GB
+[E9]   step 2320/5888  loss=0.175  25.9분  VRAM 11.2GB
+[E9]   step 2340/5888  loss=0.150  26.2분  VRAM 11.2GB
+[E9]   step 2360/5888  loss=0.174  26.4분  VRAM 11.2GB
+[E9]   step 2380/5888  loss=0.156  26.6분  VRAM 11.2GB
+[E9]   step 2400/5888  loss=0.097  26.8분  VRAM 11.2GB
+[E9]   step 2420/5888  loss=0.130  27.1분  VRAM 11.2GB
+[E9]   step 2440/5888  loss=0.149  27.3분  VRAM 11.2GB
+[E9]   step 2460/5888  loss=0.162  27.5분  VRAM 11.2GB
+[E9]   step 2480/5888  loss=0.216  27.7분  VRAM 11.2GB
+[E9]   step 2500/5888  loss=0.192  27.9분  VRAM 11.2GB
+[E9]   중간 저장 → /content/drive/MyDrive/adapter_A
+[E9]   step 2520/5888  loss=0.346  28.2분  VRAM 11.2GB
+[E9]   step 2540/5888  loss=0.286  28.4분  VRAM 11.2GB
+[E9]   step 2560/5888  loss=0.132  28.6분  VRAM 11.2GB
+[E9]   step 2580/5888  loss=0.161  28.9분  VRAM 11.2GB
+[E9]   step 2600/5888  loss=0.118  29.1분  VRAM 11.2GB
+[E9]   step 2620/5888  loss=0.116  29.3분  VRAM 11.2GB
+[E9]   step 2640/5888  loss=0.199  29.5분  VRAM 11.2GB
+[E9]   step 2660/5888  loss=0.077  29.8분  VRAM 11.2GB
+[E9]   step 2680/5888  loss=0.284  30.0분  VRAM 11.2GB
+[E9]   step 2700/5888  loss=0.226  30.2분  VRAM 11.2GB
+[E9]   step 2720/5888  loss=0.171  30.4분  VRAM 11.2GB
+[E9]   step 2740/5888  loss=0.111  30.7분  VRAM 11.2GB
+[E9]   step 2760/5888  loss=0.272  30.9분  VRAM 11.2GB
+[E9]   step 2780/5888  loss=0.173  31.1분  VRAM 11.2GB
+[E9]   step 2800/5888  loss=0.181  31.3분  VRAM 11.2GB
+[E9]   step 2820/5888  loss=0.210  31.6분  VRAM 11.2GB
+[E9]   step 2840/5888  loss=0.095  31.8분  VRAM 11.2GB
+[E9]   step 2860/5888  loss=0.096  32.0분  VRAM 11.2GB
+[E9]   step 2880/5888  loss=0.104  32.3분  VRAM 11.2GB
+[E9]   step 2900/5888  loss=0.135  32.5분  VRAM 11.2GB
+[E9]   step 2920/5888  loss=0.255  32.7분  VRAM 11.2GB
+[E9]   step 2940/5888  loss=0.154  32.9분  VRAM 11.2GB
+[E9]   step 2960/5888  loss=0.132  33.1분  VRAM 11.2GB
+[E9]   step 2980/5888  loss=0.081  33.4분  VRAM 11.2GB
+[E9]   step 3000/5888  loss=0.158  33.6분  VRAM 11.2GB
+[E9]   중간 저장 → /content/drive/MyDrive/adapter_A
+[E9]   step 3020/5888  loss=0.127  33.8분  VRAM 11.2GB
+[E9]   step 3040/5888  loss=0.158  34.1분  VRAM 11.2GB
+[E9]   step 3060/5888  loss=0.252  34.3분  VRAM 11.2GB
+[E9]   step 3080/5888  loss=0.410  34.5분  VRAM 11.2GB
+[E9]   step 3100/5888  loss=0.091  34.7분  VRAM 11.2GB
+[E9]   step 3120/5888  loss=0.196  35.0분  VRAM 11.2GB
+[E9]   step 3140/5888  loss=0.042  35.2분  VRAM 11.2GB
+[E9]   step 3160/5888  loss=0.200  35.4분  VRAM 11.2GB
+[E9]   step 3180/5888  loss=0.116  35.6분  VRAM 11.2GB
+[E9]   step 3200/5888  loss=0.085  35.9분  VRAM 11.2GB
+[E9]   step 3220/5888  loss=0.115  36.1분  VRAM 11.2GB
+[E9]   step 3240/5888  loss=0.185  36.3분  VRAM 11.2GB
+[E9]   step 3260/5888  loss=0.070  36.6분  VRAM 11.2GB
+[E9]   step 3280/5888  loss=0.095  36.8분  VRAM 11.2GB
+[E9]   step 3300/5888  loss=0.092  37.0분  VRAM 11.2GB
+[E9]   step 3320/5888  loss=0.093  37.3분  VRAM 11.2GB
+[E9]   step 3340/5888  loss=0.226  37.5분  VRAM 11.2GB
+[E9]   step 3360/5888  loss=0.179  37.7분  VRAM 11.2GB
+[E9]   step 3380/5888  loss=0.146  37.9분  VRAM 11.2GB
+[E9]   step 3400/5888  loss=0.304  38.2분  VRAM 11.2GB
+[E9]   step 3420/5888  loss=0.130  38.4분  VRAM 11.2GB
+[E9]   step 3440/5888  loss=0.182  38.6분  VRAM 11.2GB
+[E9]   step 3460/5888  loss=0.183  38.9분  VRAM 11.2GB
+[E9]   step 3480/5888  loss=0.228  39.1분  VRAM 11.2GB
+[E9]   step 3500/5888  loss=0.129  39.3분  VRAM 11.2GB
+[E9]   중간 저장 → /content/drive/MyDrive/adapter_A
+[E9]   step 3520/5888  loss=0.094  39.6분  VRAM 11.2GB
+[E9]   step 3540/5888  loss=0.077  39.8분  VRAM 11.2GB
+[E9]   step 3560/5888  loss=0.095  40.0분  VRAM 11.2GB
+[E9]   step 3580/5888  loss=0.103  40.3분  VRAM 11.2GB
+[E9]   step 3600/5888  loss=0.290  40.5분  VRAM 11.2GB
+[E9]   step 3620/5888  loss=0.103  40.7분  VRAM 11.2GB
+[E9]   step 3640/5888  loss=0.058  40.9분  VRAM 11.2GB
+[E9]   step 3660/5888  loss=0.068  41.2분  VRAM 11.2GB
+[E9]   step 3680/5888  loss=0.091  41.4분  VRAM 11.2GB
+[E9]   step 3700/5888  loss=0.237  41.6분  VRAM 11.2GB
+[E9]   step 3720/5888  loss=0.199  41.9분  VRAM 11.2GB
+[E9]   step 3740/5888  loss=0.410  42.1분  VRAM 11.2GB
+[E9]   step 3760/5888  loss=0.192  42.3분  VRAM 11.2GB
+[E9]   step 3780/5888  loss=0.053  42.5분  VRAM 11.2GB
+[E9]   step 3800/5888  loss=0.428  42.8분  VRAM 11.2GB
+[E9]   step 3820/5888  loss=0.231  43.0분  VRAM 11.2GB
+[E9]   step 3840/5888  loss=0.187  43.2분  VRAM 11.2GB
+[E9]   step 3860/5888  loss=0.114  43.5분  VRAM 11.2GB
+[E9]   step 3880/5888  loss=0.243  43.7분  VRAM 11.2GB
+[E9]   step 3900/5888  loss=0.127  43.9분  VRAM 11.2GB
+[E9]   step 3920/5888  loss=0.117  44.1분  VRAM 11.2GB
+[E9]   step 3940/5888  loss=0.138  44.4분  VRAM 11.2GB
+[E9]   step 3960/5888  loss=0.100  44.6분  VRAM 11.2GB
+[E9]   step 3980/5888  loss=0.197  44.8분  VRAM 11.2GB
+[E9]   step 4000/5888  loss=0.152  45.1분  VRAM 11.2GB
+[E9]   중간 저장 → /content/drive/MyDrive/adapter_A
+[E9]   step 4020/5888  loss=0.378  45.3분  VRAM 11.2GB
+[E9]   step 4040/5888  loss=0.348  45.5분  VRAM 11.2GB
+[E9]   step 4060/5888  loss=0.199  45.8분  VRAM 11.2GB
+[E9]   step 4080/5888  loss=0.166  46.0분  VRAM 11.2GB
+[E9]   step 4100/5888  loss=0.125  46.2분  VRAM 11.2GB
+[E9]   step 4120/5888  loss=0.113  46.5분  VRAM 11.2GB
+[E9]   step 4140/5888  loss=0.148  46.7분  VRAM 11.2GB
+[E9]   step 4160/5888  loss=0.118  46.9분  VRAM 11.2GB
+[E9]   step 4180/5888  loss=0.115  47.1분  VRAM 11.2GB
+[E9]   step 4200/5888  loss=0.167  47.4분  VRAM 11.2GB
+[E9]   step 4220/5888  loss=0.136  47.6분  VRAM 11.2GB
+[E9]   step 4240/5888  loss=0.142  47.8분  VRAM 11.2GB
+[E9]   step 4260/5888  loss=0.177  48.0분  VRAM 11.2GB
+[E9]   step 4280/5888  loss=0.144  48.3분  VRAM 11.2GB
+[E9]   step 4300/5888  loss=0.403  48.5분  VRAM 11.2GB
+[E9]   step 4320/5888  loss=0.161  48.7분  VRAM 11.2GB
+[E9]   step 4340/5888  loss=0.112  49.0분  VRAM 11.2GB
+[E9]   step 4360/5888  loss=0.106  49.2분  VRAM 11.2GB
+[E9]   step 4380/5888  loss=0.118  49.4분  VRAM 11.2GB
+[E9]   step 4400/5888  loss=0.084  49.6분  VRAM 11.2GB
+[E9]   step 4420/5888  loss=0.132  49.9분  VRAM 11.2GB
+[E9]   step 4440/5888  loss=0.091  50.1분  VRAM 11.2GB
+[E9]   step 4460/5888  loss=0.154  50.3분  VRAM 11.2GB
+[E9]   step 4480/5888  loss=0.179  50.6분  VRAM 11.2GB
+[E9]   step 4500/5888  loss=0.212  50.8분  VRAM 11.2GB
+[E9]   중간 저장 → /content/drive/MyDrive/adapter_A
+[E9]   step 4520/5888  loss=0.580  51.0분  VRAM 11.2GB
+[E9]   step 4540/5888  loss=0.152  51.3분  VRAM 11.2GB
+[E9]   step 4560/5888  loss=0.209  51.5분  VRAM 11.2GB
+[E9]   step 4580/5888  loss=0.154  51.7분  VRAM 11.2GB
+[E9]   step 4600/5888  loss=0.170  52.0분  VRAM 11.2GB
+[E9]   step 4620/5888  loss=0.192  52.2분  VRAM 11.2GB
+[E9]   step 4640/5888  loss=0.080  52.4분  VRAM 11.2GB
+[E9]   step 4660/5888  loss=0.121  52.6분  VRAM 11.2GB
+[E9]   step 4680/5888  loss=0.138  52.9분  VRAM 11.2GB
+[E9]   step 4700/5888  loss=0.101  53.1분  VRAM 11.2GB
+[E9]   step 4720/5888  loss=0.047  53.3분  VRAM 11.2GB
+[E9]   step 4740/5888  loss=0.204  53.5분  VRAM 11.2GB
+[E9]   step 4760/5888  loss=0.244  53.8분  VRAM 11.2GB
+[E9]   step 4780/5888  loss=0.145  54.0분  VRAM 11.2GB
+[E9]   step 4800/5888  loss=0.203  54.2분  VRAM 11.2GB
+[E9]   step 4820/5888  loss=0.113  54.4분  VRAM 11.2GB
+[E9]   step 4840/5888  loss=0.437  54.7분  VRAM 11.2GB
+[E9]   step 4860/5888  loss=0.236  54.9분  VRAM 11.2GB
+[E9]   step 4880/5888  loss=0.109  55.1분  VRAM 11.2GB
+[E9]   step 4900/5888  loss=0.010  55.4분  VRAM 11.2GB
+[E9]   step 4920/5888  loss=0.145  55.6분  VRAM 11.2GB
+[E9]   step 4940/5888  loss=0.245  55.8분  VRAM 11.2GB
+[E9]   step 4960/5888  loss=0.217  56.0분  VRAM 11.2GB
+[E9]   step 4980/5888  loss=0.068  56.3분  VRAM 11.2GB
+[E9]   step 5000/5888  loss=0.284  56.5분  VRAM 11.2GB
+[E9]   중간 저장 → /content/drive/MyDrive/adapter_A
+[E9]   step 5020/5888  loss=0.238  56.7분  VRAM 11.2GB
+[E9]   step 5040/5888  loss=0.053  57.0분  VRAM 11.2GB
+[E9]   step 5060/5888  loss=0.141  57.2분  VRAM 11.2GB
+[E9]   step 5080/5888  loss=0.100  57.4분  VRAM 11.2GB
+[E9]   step 5100/5888  loss=0.187  57.7분  VRAM 11.2GB
+[E9]   step 5120/5888  loss=0.115  57.9분  VRAM 11.2GB
+[E9]   step 5140/5888  loss=0.222  58.1분  VRAM 11.2GB
+[E9]   step 5160/5888  loss=0.129  58.3분  VRAM 11.2GB
+[E9]   step 5180/5888  loss=0.159  58.6분  VRAM 11.2GB
+[E9]   step 5200/5888  loss=0.190  58.8분  VRAM 11.2GB
+[E9]   step 5220/5888  loss=0.122  59.0분  VRAM 11.2GB
+[E9]   step 5240/5888  loss=0.157  59.2분  VRAM 11.2GB
+[E9]   step 5260/5888  loss=0.177  59.5분  VRAM 11.2GB
+[E9]   step 5280/5888  loss=0.101  59.7분  VRAM 11.2GB
+[E9]   step 5300/5888  loss=0.127  59.9분  VRAM 11.2GB
+[E9]   step 5320/5888  loss=0.164  60.1분  VRAM 11.2GB
+[E9]   step 5340/5888  loss=0.189  60.4분  VRAM 11.2GB
+[E9]   step 5360/5888  loss=0.137  60.6분  VRAM 11.2GB
+[E9]   step 5380/5888  loss=0.159  60.8분  VRAM 11.2GB
+[E9]   step 5400/5888  loss=0.135  61.1분  VRAM 11.2GB
+[E9]   step 5420/5888  loss=0.334  61.3분  VRAM 11.2GB
+[E9]   step 5440/5888  loss=0.129  61.5분  VRAM 11.2GB
+[E9]   step 5460/5888  loss=0.078  61.7분  VRAM 11.2GB
+[E9]   step 5480/5888  loss=0.230  61.9분  VRAM 11.2GB
+[E9]   step 5500/5888  loss=0.325  62.2분  VRAM 11.2GB
+[E9]   중간 저장 → /content/drive/MyDrive/adapter_A
+[E9]   step 5520/5888  loss=0.200  62.4분  VRAM 11.2GB
+[E9]   step 5540/5888  loss=0.268  62.6분  VRAM 11.2GB
+[E9]   step 5560/5888  loss=0.191  62.9분  VRAM 11.2GB
+[E9]   step 5580/5888  loss=0.192  63.1분  VRAM 11.2GB
+[E9]   step 5600/5888  loss=0.201  63.3분  VRAM 11.2GB
+[E9]   step 5620/5888  loss=0.244  63.5분  VRAM 11.2GB
+[E9]   step 5640/5888  loss=0.344  63.8분  VRAM 11.2GB
+[E9]   step 5660/5888  loss=0.096  64.0분  VRAM 11.2GB
+[E9]   step 5680/5888  loss=0.156  64.2분  VRAM 11.2GB
+[E9]   step 5700/5888  loss=0.170  64.4분  VRAM 11.2GB
+[E9]   step 5720/5888  loss=0.115  64.7분  VRAM 11.2GB
+[E9]   step 5740/5888  loss=0.106  64.9분  VRAM 11.2GB
+[E9]   step 5760/5888  loss=0.198  65.1분  VRAM 11.2GB
+[E9]   step 5780/5888  loss=0.107  65.3분  VRAM 11.2GB
+[E9]   step 5800/5888  loss=0.159  65.5분  VRAM 11.2GB
+[E9]   step 5820/5888  loss=0.149  65.8분  VRAM 11.2GB
+[E9]   step 5840/5888  loss=0.115  66.0분  VRAM 11.2GB
+[E9]   step 5860/5888  loss=0.187  66.2분  VRAM 11.2GB
+[E9]   step 5880/5888  loss=0.033  66.4분  VRAM 11.2GB
+[E9] ==================================================
+[E9] 학습 완료 (A)
+[E9]   어댑터 저장: /content/drive/MyDrive/adapter_A
+[E9]   총 5888스텝, 67분, peak VRAM 11.2GB
+[E9]   길이 초과로 건너뛴 문항: 0개 (max_len 4096 넘김)
+[E9]   다음: 이 어댑터를 base에 merge해서 run_stage0_vllm.py의 --model_path로 평가
