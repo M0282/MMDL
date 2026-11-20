@@ -102,8 +102,10 @@ python scripts/e9_train.py --train <train_B.jsonl> --image_root <이미지폴더
 
 ### SFT (진행 중)
 
-- 학습 데이터 5,890건(A/B군 공통)으로 LoRA 학습. 학습 후 val/test/Pro 평가 예정.
-- 상세: `results/sft/`
+- 학습 데이터 5,890건(A/B군 공통)으로 LoRA 학습 완료 (L4, 1 epoch).
+- A군(답만): 67분, loss 4.14→~0.1 / B군(풀이): 140분, loss 1.74→~0.7
+- 학습 후 MMMU val / test / MMMU-Pro 평가 예정 (baseline 51.89% 및 학습 전 조건 대비).
+- 상세: results/sft/ (학습 로그 포함)
 
 ## 한계
 
