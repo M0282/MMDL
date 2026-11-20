@@ -1,5 +1,15 @@
 # Results
 
-MMMU validation 평가 결과를 저장하는 폴더입니다.
+실험 결과와 요약 통계를 보관하는 폴더. 모델 가중치나 대용량 Hugging Face 캐시는 커밋하지 않는다.
 
-최종 보고서에 사용한 결과 파일과 요약 통계를 이 폴더에 보관합니다. 모델 가중치나 대용량 Hugging Face 캐시는 커밋하지 않습니다.
+## 하위 폴더
+
+| 폴더 | 내용 |
+|---|---|
+| `stage0/` | Stage 0 진단 실험 (조건 A/B/C) 원자료 + 요약 |
+| `format_verification/` | 형식 사양 재채점 검증 (GPU 없이, +9.6%p 상한 근거) |
+| `sft/` | LoRA SFT 학습 결과 (A군·B군 학습 로그, 설정) |
+
+## 파일
+
+- `mmmu_results.json` — baseline 평가 원자료 (`reports/mmmu_baseline.md`의 근거)
