@@ -7,7 +7,7 @@ Qwen3-VL-4B-Instruct를 파인튜닝해 MMMU / MMMU-Pro 점수를 baseline보다
 
 - **목표:** baseline(답만 출력) 대비 성능 개선 + 원인 분석
 - **접근:** 풀이를 허용하면 모델이 더 잘 풀지만, 공식 파서가 그 풀이의 답을 못 읽어 점수가 깎인다.
-→ 풀이를 쓰되 **공식 파서가 읽을 수 있는 형식(`Answer: (X)`)으로 끝내도록 SFT**로 학습.
+  → 풀이를 쓰되 **공식 파서가 읽을 수 있는 형식(`Answer: (X)`)으로 끝내도록 SFT**로 학습.
 
 ## 고정 평가 스펙
 
@@ -48,7 +48,6 @@ results/
 저장소에 포함하지 않고 공유 드라이브에 보관합니다.
 
 > 데이터 구축(E5·E6·E8) 노트북은 별도로 추가됩니다.
-> 
 
 ## 파이프라인
 
@@ -91,6 +90,7 @@ python scripts/e9_train.py --train <train_B.jsonl> --image_root <이미지폴더
 | A (답만) | 52.67 ± 0.19 | 52.78 ± 0.19 | 0.3% |
 | B (풀이) | 49.93 ± 0.06 | 59.96 ± 0.93 | 31% |
 | C (풀이+해상도↑) | 49.26 ± 0.39 | 60.22 ± 1.09 | 31% |
+
 - 풀이 허용: +7.18%p (보정 기준). 해상도 4배: 효과 없음 (+0.26%p).
 - 같은 응답인데 공식 파서로 채점하면 −2.74%p로 뒤집힘 → 파서 문제.
 
@@ -100,12 +100,12 @@ python scripts/e9_train.py --train <train_B.jsonl> --image_root <이미지폴더
 - 전체 900문항 기준 **약 +9.6%p** (공식 49.9% → 약 59.5%)
 - 상세: `results/format_verification/summary.md`
 
-### SFT (진행 중)
+### SFT
 
 - 학습 데이터 5,890건(A/B군 공통)으로 LoRA 학습 완료 (L4, 1 epoch).
-- A군(답만): 67분, loss 4.14→~0.1 / B군(풀이): 140분, loss 1.74→~0.7
+  - A군(답만): 67분, loss 4.14 → 약0.1 / B군(풀이): 140분, loss 1.74 → 약0.7
 - 학습 후 MMMU val / test / MMMU-Pro 평가 예정 (baseline 51.89% 및 학습 전 조건 대비).
-- 상세: results/sft/ (학습 로그 포함)
+- 상세: `results/sft/` (학습 로그 포함)
 
 ## 한계
 
@@ -116,5 +116,5 @@ python scripts/e9_train.py --train <train_B.jsonl> --image_root <이미지폴더
 ## 참고문헌
 
 - Qwen3-VL Technical Report. arXiv:2511.21631
-- Yue et al. MMMU. CVPR 2024. arXiv:2311.16502 / MMMU-Pro. arXiv:2409.02813
-- Hu et al. LoRA. ICLR 2022. arXiv:2106.09685
+- Yue et al. MMMU. CVPR 2024. arXiv:2311.16502 / MMMU-Pro. arXiv:2409.02813
+- Hu et al. LoRA. ICLR 2022. arXiv:2106.09685
