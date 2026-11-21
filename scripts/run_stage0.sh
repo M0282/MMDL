@@ -5,7 +5,7 @@
 # 끊겨도 이미 끝난 실행(.meta.json 있음)은 건너뛰니 그냥 다시 실행하면 됨.
 set -u
 cd "$(dirname "$0")/.."
-OUT=results/stage0
+OUT="${OUT:-results/stage0}"   # 어댑터 평가 땐 다른 폴더로: OUT=results/sft_eval/A
 mkdir -p "$OUT/logs"
 
 if [ "${SMOKE:-0}" = "1" ]; then
