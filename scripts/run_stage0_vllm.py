@@ -146,6 +146,8 @@ def main():
     ap.add_argument("--data_root", default="MMMU/MMMU")
     ap.add_argument("--data_revision", default=DATA_REVISION)
     ap.add_argument("--out_dir", default="results/stage0")
+    ap.add_argument("--split", default="validation", choices=["validation", "test"],
+                    help="test는 최종 평가용 (MMMU 정답 공개본, 10,500문항)")
     ap.add_argument("--limit_per_subject", type=int, default=0, help="0이면 과목당 30문제 전체")
     ap.add_argument("--max_model_len", type=int, default=24576)
     ap.add_argument("--gpu_memory_utilization", type=float, default=0.85,
@@ -165,7 +167,7 @@ def main():
     print(f"[조건 {args.condition}] {cond} seed={args.seed}")
     samples = []
     for subj in SUBJECTS:
-        ds = load_mmmu_split(args.data_root, subj, args.data_revision)
+        ds = load_mmmu_split(args.data_root, subj, args.data_revision, split=args.split)
         if args.limit_per_subject:
             ds = ds.select(range(min(args.limit_per_subject, len(ds))))
         samples += [(subj, s) for s in ds]
@@ -240,7 +242,7 @@ def main():
 
     import torch
     meta = {
-        "condition": args.condition, **cond, "min_pixels": MIN_PIXELS, "seed": args.seed,
+        "condition": args.condition, "split": args.split, **cond, "min_pixels": MIN_PIXELS, "seed": args.seed,
         "model_path": args.model_path, "model_revision": args.model_revision,
         "data_revision": args.data_revision, "backend": "vllm",
         "n_samples": len(samples), "n_correct": n_correct,
