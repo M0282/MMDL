@@ -64,6 +64,8 @@ def main():
     ap.add_argument("--limit_per_subject", type=int, default=0)
     ap.add_argument("--batch_size", type=int, default=16)
     ap.add_argument("--tag", default="")
+    ap.add_argument("--adapter_path", default="",
+                    help="LoRA 어댑터 폴더 (예: adapter_B). 주면 base 모델에 붙여서(merge) 평가")
     args = ap.parse_args()
 
     cond = CONDITIONS[args.condition]
@@ -83,6 +85,12 @@ def main():
 
     model = Qwen3VLForConditionalGeneration.from_pretrained(
         args.model_path, revision=args.model_revision, dtype=torch.bfloat16, device_map="cuda")
+    if args.adapter_path:
+        # LoRA 어댑터를 붙인 뒤 가중치에 합쳐서(merge) 일반 모델처럼 생성 → 속도 손해 없음
+        from peft import PeftModel
+        model = PeftModel.from_pretrained(model, args.adapter_path)
+        model = model.merge_and_unload()
+        print(f"  [어댑터] {args.adapter_path} 적용 (merge 완료)")
     model.eval()
     processor = AutoProcessor.from_pretrained(
         args.model_path, revision=args.model_revision, min_pixels=MIN_PIXELS, max_pixels=cond["max_pixels"])
@@ -181,6 +189,7 @@ def main():
         "condition": args.condition, **cond, "min_pixels": MIN_PIXELS, "seed": args.seed,
         "model_path": args.model_path, "model_revision": args.model_revision,
         "data_revision": args.data_revision, "backend": "transformers-batched",
+        "adapter_path": args.adapter_path or None,
         "batch_size": args.batch_size, "effective_image_processor": str(eff),
         "n_samples": len(samples), "n_correct": n_correct,
         "micro_acc": n_correct / len(samples), "micro_acc_official_parser": n_correct_off / len(samples),
