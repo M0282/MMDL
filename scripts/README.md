@@ -4,7 +4,7 @@
 
 ## 평가 (baseline / 체크포인트 공용)
 
-- `run_mmmu_eval.py` — MMMU validation 900문항 평가. `--model_path`로 baseline 또는 fine-tune 체크포인트 지정
+- `run_mmmu_eval.py` — MMMU validation 900문항 평가. `--model_path`로 baseline 또는 fine-tune 체크포인트, `--adapter_path`로 LoRA 어댑터 지정
 - `prepare_mmmu_local.py` — MMMU 데이터 로컬 준비
 - `requirements-minimal.txt` — 핵심 6개 패키지 / `requirements.txt` — Colab 런타임 전체 freeze
 
@@ -20,4 +20,10 @@
 - `e2_env_test.py` — LoRA 학습 환경 점검 (더미 데이터, VRAM·동작 확인용)
 - `e9_train.py` — LoRA SFT 학습. A군(답만)·B군(풀이) 공용, 학습 데이터만 교체
 
-재현 상세는 각 결과 폴더의 README 참고: `results/stage0/`, `results/format_verification/`, `results/sft/`.
+## Colab 노트북
+
+- `MMDL_E5_E6_Colab.ipynb` — 외부 데이터 수집·정제 및 MMMU 중복 검사 (E5·E6)
+- `MMDL_E8_External_AB_(1).ipynb` — 외부 데이터 A군/B군 학습셋 구성 (E8)
+- `MMDL_E13_MMMU_Pro_AB.ipynb` — MMMU-Pro 평가. 어댑터 A/B군 + 학습 전 기준선 (E13)
+
+재현 상세는 각 결과 폴더의 README 참고: `results/stage0/`, `results/format_verification/`, `results/sft/`, `results/sft_eval/`, `results/mmmu_pro/`.
