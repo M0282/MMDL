@@ -61,6 +61,8 @@ def main():
     ap.add_argument("--data_root", default="MMMU/MMMU")
     ap.add_argument("--data_revision", default=DATA_REVISION)
     ap.add_argument("--out_dir", default="results/stage0")
+    ap.add_argument("--split", default="validation", choices=["validation", "test"],
+                    help="test는 최종 평가용 (MMMU 정답 공개본, 10,500문항)")
     ap.add_argument("--limit_per_subject", type=int, default=0)
     ap.add_argument("--batch_size", type=int, default=16)
     ap.add_argument("--tag", default="")
@@ -74,14 +76,13 @@ def main():
     jsonl_path = os.path.join(args.out_dir, f"{name}.jsonl")
     meta_path = os.path.join(args.out_dir, f"{name}.meta.json")
 
-    print(f"[조건 {args.condition}] {cond} seed={args.seed} batch={args.batch_size}")
-    samples = []
-    for subj in SUBJECTS:
-        ds = load_mmmu_split(args.data_root, subj, args.data_revision)
+    print(f"[조건 {args.condition}] {cond} seed={args.seed} batch={args.batch_size} split={args.split}")
+
+    def load_subject(subj):
+        ds = load_mmmu_split(args.data_root, subj, args.data_revision, split=args.split)
         if args.limit_per_subject:
             ds = ds.select(range(min(args.limit_per_subject, len(ds))))
-        samples += [(subj, s) for s in ds]
-    print(f"  {len(samples)}문항 로드")
+        return [(subj, s) for s in ds]
 
     model = Qwen3VLForConditionalGeneration.from_pretrained(
         args.model_path, revision=args.model_revision, dtype=torch.bfloat16, device_map="cuda")
@@ -100,18 +101,19 @@ def main():
     print(f"  [확인] 실제 적용된 이미지 설정: {eff}")
     eos = model.generation_config.eos_token_id
 
-    # 준비: 프롬프트 텍스트 + 이미지. 이미지 수·크기가 비슷한 것끼리 묶어서 padding 낭비를 줄임
-    prepared = []
-    for idx, (subj, s) in enumerate(samples):
-        prompt, is_mc, letters, index2ans = build_prompt(s, cond["prompt_mode"])
-        images = gather_images(s)
-        content = [{"type": "image"} for _ in images] + [{"type": "text", "text": prompt}]
-        text = processor.apply_chat_template([{"role": "user", "content": content}],
-                                             tokenize=False, add_generation_prompt=True)
-        size = sum(im.width * im.height for im in images)
-        prepared.append(dict(idx=idx, subj=subj, s=s, is_mc=is_mc, letters=letters,
-                             index2ans=index2ans, images=images, text=text, size=size))
-    order = sorted(prepared, key=lambda p: (len(p["images"]), p["size"]))
+    def prepare(samples, start_idx=0):
+        # 프롬프트 텍스트 + 이미지. 이미지 수·크기가 비슷한 것끼리 묶어서 padding 낭비를 줄임
+        prepared = []
+        for idx, (subj, s) in enumerate(samples, start=start_idx):
+            prompt, is_mc, letters, index2ans = build_prompt(s, cond["prompt_mode"])
+            images = gather_images(s)
+            content = [{"type": "image"} for _ in images] + [{"type": "text", "text": prompt}]
+            text = processor.apply_chat_template([{"role": "user", "content": content}],
+                                                 tokenize=False, add_generation_prompt=True)
+            size = sum(im.width * im.height for im in images)
+            prepared.append(dict(idx=idx, subj=subj, s=s, is_mc=is_mc, letters=letters,
+                                 index2ans=index2ans, images=images, text=text, size=size))
+        return prepared
 
     torch.manual_seed(args.seed)
     results = {}
@@ -159,23 +161,26 @@ def main():
             run_safe(batch[:h])
             run_safe(batch[h:])
 
-    t0 = time.time()
-    for i in range(0, len(order), args.batch_size):
-        run_safe(order[i:i + args.batch_size])
-        done = len(results)
-        el = time.time() - t0
-        print(f"  [{done}/{len(order)}] 경과 {el / 60:.1f}분, 남은 예상 {el / done * (len(order) - done) / 60:.1f}분",
-              flush=True)
-    elapsed = time.time() - t0
+    def run_group(prepared, label=""):
+        order = sorted(prepared, key=lambda p: (len(p["images"]), p["size"]))
+        g0 = time.time()
+        for i in range(0, len(order), args.batch_size):
+            run_safe(order[i:i + args.batch_size])
+            done = min(i + args.batch_size, len(order))
+            el = time.time() - g0
+            print(f"  {label}[{done}/{len(order)}] 경과 {el / 60:.1f}분, "
+                  f"남은 예상 {el / done * (len(order) - done) / 60:.1f}분", flush=True)
 
-    n_correct = n_correct_off = 0
-    with open(jsonl_path, "w") as f:
+    counts = {"n": 0, "correct": 0, "correct_off": 0}
+
+    def write(prepared, f):
         for p in prepared:
-            response, n_tok, truncated = results[p["idx"]]
+            response, n_tok, truncated = results.pop(p["idx"])
             pred, correct, pred_off, correct_off, seg = grade(
                 response, cond["prompt_mode"], p["is_mc"], p["letters"], p["index2ans"], p["s"]["answer"])
-            n_correct += correct
-            n_correct_off += correct_off
+            counts["n"] += 1
+            counts["correct"] += correct
+            counts["correct_off"] += correct_off
             f.write(json.dumps({
                 "id": p["s"]["id"], "subject": p["subj"], "is_mc": p["is_mc"], "gold": p["s"]["answer"],
                 "response": response, "final_segment": seg if seg != response else None,
@@ -184,15 +189,68 @@ def main():
                 "n_gen_tokens": n_tok, "truncated": truncated,
                 "finish_reason": "length" if truncated else "stop", "error": None,
             }, ensure_ascii=False) + "\n")
+        f.flush()
+
+    t0 = time.time()
+    if args.split == "validation":
+        # validation: 900문항을 한 번에 정렬·배치 (0단계·SFT 평가와 완전히 같은 방식 → 결과 재현)
+        samples = [x for subj in SUBJECTS for x in load_subject(subj)]
+        print(f"  {len(samples)}문항 로드")
+        prepared = prepare(samples)
+        run_group(prepared)
+        with open(jsonl_path, "w") as f:
+            write(prepared, f)
+    else:
+        # test(10,500문항): 이미지를 한꺼번에 메모리에 올리지 않도록 과목별로 처리.
+        # 과목이 끝날 때마다 jsonl에 저장 → 중간에 끊겨도 다시 실행하면 끝난 과목은 건너뜀
+        done_subj = set()
+        if os.path.exists(jsonl_path):
+            for line in open(jsonl_path):
+                r = json.loads(line)
+                done_subj.add(r["subject"])
+                counts["n"] += 1
+                counts["correct"] += r["correct"]
+                counts["correct_off"] += r["correct_official"]
+            # 마지막 과목은 중간에 끊겼을 수 있으니 그 과목 줄을 지우고 다시 함
+            last = None
+            lines = open(jsonl_path).read().splitlines()
+            if lines:
+                last = json.loads(lines[-1])["subject"]
+                n_last = sum(1 for l in lines if json.loads(l)["subject"] == last)
+                expected = len(load_subject(last))
+                if n_last < expected:
+                    keep = [l for l in lines if json.loads(l)["subject"] != last]
+                    open(jsonl_path, "w").write("\n".join(keep) + ("\n" if keep else ""))
+                    done_subj.discard(last)
+                    dropped = [json.loads(l) for l in lines if json.loads(l)["subject"] == last]
+                    counts["n"] -= len(dropped)
+                    counts["correct"] -= sum(r["correct"] for r in dropped)
+                    counts["correct_off"] -= sum(r["correct_official"] for r in dropped)
+            print(f"  [재시작] 이미 끝난 과목 {len(done_subj)}개 건너뜀")
+        idx0 = 0
+        with open(jsonl_path, "a") as f:
+            for k, subj in enumerate(SUBJECTS):
+                if subj in done_subj:
+                    continue
+                samples = load_subject(subj)
+                prepared = prepare(samples, idx0)
+                idx0 += len(samples)
+                run_group(prepared, label=f"({k + 1}/30 {subj}) ")
+                write(prepared, f)
+                del prepared, samples
+                el = time.time() - t0
+                print(f"  == {subj} 끝 · 누적 {counts['n']}문항 · 경과 {el / 60:.1f}분", flush=True)
+    elapsed = time.time() - t0
+    n_samples, n_correct, n_correct_off = counts["n"], counts["correct"], counts["correct_off"]
 
     meta = {
-        "condition": args.condition, **cond, "min_pixels": MIN_PIXELS, "seed": args.seed,
+        "condition": args.condition, "split": args.split, **cond, "min_pixels": MIN_PIXELS, "seed": args.seed,
         "model_path": args.model_path, "model_revision": args.model_revision,
         "data_revision": args.data_revision, "backend": "transformers-batched",
         "adapter_path": args.adapter_path or None,
         "batch_size": args.batch_size, "effective_image_processor": str(eff),
-        "n_samples": len(samples), "n_correct": n_correct,
-        "micro_acc": n_correct / len(samples), "micro_acc_official_parser": n_correct_off / len(samples),
+        "n_samples": n_samples, "n_correct": n_correct,
+        "micro_acc": n_correct / n_samples, "micro_acc_official_parser": n_correct_off / n_samples,
         "elapsed_sec": round(elapsed, 1), "gpu": torch.cuda.get_device_name(0),
         "peak_vram_gb": round(torch.cuda.max_memory_allocated() / 1e9, 2),
         "torch": torch.__version__, "sampling": {**SAMPLING_RECIPE, "presence_penalty": PRESENCE_PENALTY},
@@ -201,8 +259,8 @@ def main():
     meta["transformers"] = transformers.__version__
     with open(meta_path, "w") as f:
         json.dump(meta, f, ensure_ascii=False, indent=2)
-    print(f"\n[{name}] 수정 파서 {n_correct / len(samples) * 100:.2f}% | 공식 파서 "
-          f"{n_correct_off / len(samples) * 100:.2f}%  ({elapsed / 60:.1f}분, peak VRAM {meta['peak_vram_gb']}GB)")
+    print(f"\n[{name}] 수정 파서 {n_correct / n_samples * 100:.2f}% | 공식 파서 "
+          f"{n_correct_off / n_samples * 100:.2f}%  ({elapsed / 60:.1f}분, peak VRAM {meta['peak_vram_gb']}GB)")
     print(f"저장: {jsonl_path}")
 
 
