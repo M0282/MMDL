@@ -139,6 +139,21 @@ python scripts/summarize_test_eval.py --in_dir results/test_eval --out results/t
 - B군은 lr 2e-5 재학습에서 학습 전 조건 B보다 +2.81%p (seed 흔들림 ±2.0 수준이라 추가 확인 필요).
 - 형식 사양은 학습됨: 조건 B 잘림 30~36% → SFT 후 0~1.6%.
 
+## MMMU-Pro Zero-Leakage On-Policy RL (StructReward-GRPO) 확장
+
+Off-Policy SFT에서 확인된 치명적 망각(Catastrophic Forgetting) 문제를 해결하기 위해, **56,860 QA (30과목 · 183세부분야) Zero-Leakage 외부 데이터셋**과 **Base 직결 Pure On-Policy StructReward-GRPO RL**을 구축하여 **MMMU-Pro 전체 3,460문항 (`Standard10` 1,730 + `Vision` 1,730)**에서 순수 가중치 성능 향상을 검증했습니다.
+
+- **핵심 방법**: Vision Encoder + `visual.merger` 100% 동결, Language-only LoRA (`r=32`), Base 직결 Schulman $k_3$ Reverse KL ($\beta=0.02$), 정답 게이트 결정론적 프로세스 보상(`StructReward`), SGLang BF16 고속 롤아웃 및 평가
+- **주요 성과 (`official_cot` 수정 없음, 전체 3,460문항)**:
+  - **2K 예산 (`max_tokens=2048`)**: Base `44.62%` → Stage 1 SFT `41.99%` (-2.63%p) → **Stage 2a RL v1 `46.65%` (+2.03%p vs Base, +4.66%p vs SFT)**
+  - **8K 예산 (`max_tokens=8192`)**: Base 8K `49.37%` → **★ Stage 2a RL v1 8K `51.53%` (`Standard10 53.12%` / `Vision 49.94%`, +2.16%p vs 8K Base / +6.91%p vs 2K Base)**, 8K 잘림률 절반 이하(`18.4% → 8.4%`), 평균 토큰 `-28%` 절감
+  - **8K Test-Time Scaling (`maj@5`)**: RL v1 8K `maj@5` **`52.63%`** (`Standard10 52.89%` / **`Vision 52.37%`**, **+8.01%p vs 2K Base / +3.26%p vs 8K Base**, `pass@5` 상한 `65.2% / 69.3%`)
+- **세부 파일**:
+  - 코드 및 단위 테스트(36개): [`scripts/mmmu_pro_rl/`](scripts/mmmu_pro_rl/README.md)
+  - 전체 평가 JSON 및 RL 학습 로그: [`results/mmmu_pro_rl/`](results/mmmu_pro_rl/README.md)
+  - Zero-Leakage 데이터셋 큐레이션 문서: [`docs/mmmu_pro_dataset_curation_ko.md`](docs/mmmu_pro_dataset_curation_ko.md)
+  - 상세 실험 보고서 및 차트 5종: [`reports/mmmu_pro_rl_report_ko.md`](reports/mmmu_pro_rl_report_ko.md)
+
 ## 한계
 
 - 조건 B는 응답의 31%가 2048토큰에서 잘려, 59.96%는 상한이 아니라 하한선.
@@ -150,3 +165,7 @@ python scripts/summarize_test_eval.py --in_dir results/test_eval --out results/t
 - Qwen3-VL Technical Report. arXiv:2511.21631
 - Yue et al. MMMU. CVPR 2024. arXiv:2311.16502 / MMMU-Pro. arXiv:2409.02813
 - Hu et al. LoRA. ICLR 2022. arXiv:2106.09685
+- Shao et al. DeepSeekMath (GRPO). arXiv:2402.03300
+- Yu et al. DAPO: An Open-Source LLM Reinforcement Learning System at Scale. arXiv:2503.14476
+- Li et al. StructReward: Efficient Structured Process Rewards for Self-Correcting Multimodal Reasoning. 2026
+- Zheng et al. SGLang: Efficient Execution of Structured Language Model Programs. NeurIPS 2024. arXiv:2312.07104
