@@ -30,24 +30,31 @@ reports/mmmu_baseline.md          baseline 보고서
 
 scripts/
   run_mmmu_eval.py                baseline 평가 (51.89%)
-  run_stage0_hf.py / _vllm.py     Stage 0 조건 A·B·C 평가
+  run_mmmu_eval_v2.py             baseline 재실행용 (전체 응답 저장, seed 흔들림 측정)
+  run_stage0_hf.py / _vllm.py     Stage 0 조건 A·B·C 평가, SFT 어댑터 평가 (--adapter_path, --split test)
   run_stage0.sh                   Stage 0 실행 래퍼
-  summarize_stage0.py             Stage 0 결과 집계
+  summarize_stage0.py             Stage 0 / SFT validation 결과 집계
+  summarize_test_eval.py          MMMU test 결과 집계
   prepare_mmmu_local.py           MMMU 로컬 준비
   verify_format_spec.py           형식 사양 재채점 검증
   e2_env_test.py                  LoRA 학습 환경 테스트
   e9_train.py                     SFT 학습 (A군/B군, LoRA)
+  MMDL_E5_E6_Colab.ipynb          외부 데이터 수집·정제 + MMMU 중복 검사 (E5·E6)
+  MMDL_E8_External_AB_(1).ipynb   외부 데이터 A군/B군 학습셋 구성 (E8)
+  MMDL_E13_MMMU_Pro_AB.ipynb      MMMU-Pro 평가 (E13)
 
 results/
+  mmmu_results.json               baseline 원자료
   stage0/                         조건 A·B·C 전체 응답(jsonl) + 설정(meta.json) + summary.md
   format_verification/summary.md  형식 사양 재채점 검증 결과
-  sft/                            SFT 학습 로그 + 설정 (어댑터 위치 안내)
+  sft/                            SFT 학습 로그 (lr 1e-4, lr 2e-5) + 설정 (어댑터 위치 안내)
+  sft_eval/                       SFT 어댑터 MMMU validation 평가 (A/B, A_lr2e-5/B_lr2e-5, seed 3회)
+  test_eval/                      MMMU test 평가 (학습 전 A·B, SFT A·B)
+  mmmu_pro/                       MMMU-Pro 평가 (학습 전, SFT A·B)
 ```
 
 용량이 큰 이미지(21,298장) · 학습 데이터(train_A/B.jsonl) · LoRA 어댑터는
 저장소에 포함하지 않고 공유 드라이브에 보관합니다.
-
-> 데이터 구축(E5·E6·E8) 노트북은 별도로 추가됩니다.
 
 ## 파이프라인
 
@@ -56,10 +63,12 @@ results/
 | baseline | 답만 출력, 900문항 평가 | `scripts/run_mmmu_eval.py` | 51.89% |
 | Stage 0 | 조건 A(답만)·B(풀이)·C(풀이+해상도↑)를 seed 3회씩 평가 | `scripts/run_stage0_*.py` | `results/stage0/` |
 | 형식 검증 | 저장된 B 응답을 `Answer: (X)`로 재채점, 공식 점수 회복분 측정 | `scripts/verify_format_spec.py` | `results/format_verification/` |
-| 데이터 구축 | 외부 데이터 풀이 + 기준 정답을 형식 사양대로 변환 (A군/B군, 5,890건) | (E8 노트북) | 공유 드라이브 |
+| 데이터 점검·중복 검사 | 외부 데이터 점검(E5), MMMU 문항과 겹치는 것 제거(E6) | `scripts/MMDL_E5_E6_Colab.ipynb` | 공유 드라이브 |
+| 데이터 구축 | 외부 데이터 풀이 + 기준 정답을 형식 사양대로 변환 (A군/B군, 5,890건) | `scripts/MMDL_E8_External_AB_(1).ipynb` | 공유 드라이브 |
 | 학습 환경 | LoRA 학습이 Colab(L4)에서 되는지 확인 | `scripts/e2_env_test.py` | — |
-| SFT | A군(답만)·B군(풀이+답) LoRA 학습 | `scripts/e9_train.py` | `results/sft/` |
-| 최종 평가 | 학습 모델로 MMMU test + MMMU-Pro (예정) | — | — |
+| SFT | A군(답만)·B군(풀이+답) LoRA 학습 (lr 1e-4, 재학습 lr 2e-5) | `scripts/e9_train.py` | `results/sft/` |
+| SFT 평가 | 어댑터를 붙여 MMMU validation, seed 3회 | `scripts/run_stage0_hf.py --adapter_path` | `results/sft_eval/` |
+| 최종 평가 | MMMU test (10,500) + MMMU-Pro (1,730) | `scripts/run_stage0_hf.py --split test`, `scripts/MMDL_E13_MMMU_Pro_AB.ipynb` | `results/test_eval/`, `results/mmmu_pro/` |
 
 ## 재현 방법
 
@@ -79,6 +88,14 @@ python scripts/verify_format_spec.py --stage0_dir results/stage0 --cond B
 python scripts/e9_train.py --train <train_B.jsonl> --image_root <이미지폴더> \
   --out adapter_B --tag B --epochs 1
 # A군은 train_A.jsonl / --out adapter_A / --tag A
+# 재학습은 --lr 2e-5
+
+# SFT 어댑터 평가 (validation / test)
+python scripts/run_stage0_hf.py --condition B --seed 42 --adapter_path adapters/adapter_B
+python scripts/run_stage0_hf.py --condition B --seed 42 --adapter_path adapters/adapter_B --split test
+python scripts/summarize_test_eval.py --in_dir results/test_eval --out results/test_eval/summary.md
+
+# MMMU-Pro: Colab에서 scripts/MMDL_E13_MMMU_Pro_AB.ipynb 실행 (results/mmmu_pro/README.md 참고)
 ```
 
 ## 결과 요약
@@ -104,8 +121,23 @@ python scripts/e9_train.py --train <train_B.jsonl> --image_root <이미지폴더
 
 - 학습 데이터 5,890건(A/B군 공통)으로 LoRA 학습 완료 (L4, 1 epoch).
   - A군(답만): 67분, loss 4.14 → 약0.1 / B군(풀이): 140분, loss 1.74 → 약0.7
-- 학습 후 MMMU val / test / MMMU-Pro 평가 예정 (baseline 51.89% 및 학습 전 조건 대비).
 - 상세: `results/sft/` (학습 로그 포함)
+
+### SFT 후 평가 (공식 파서, 같은 조건끼리 비교)
+
+| 데이터 | 학습 전 A | SFT A군 | 학습 전 B | SFT B군 | 상세 |
+| --- | --- | --- | --- | --- | --- |
+| MMMU validation (lr 1e-4, seed 3회) | 52.67 ± 0.19 | 44.19 ± 0.61 | 49.93 ± 0.06 | 50.37 ± 1.60 | `results/sft_eval/A`, `B` |
+| MMMU validation (lr 2e-5, seed 3회) | 52.67 ± 0.19 | 47.56 ± 1.64 | 49.93 ± 0.06 | **52.74 ± 2.00** | `results/sft_eval/A_lr2e-5`, `B_lr2e-5` |
+| MMMU test (같은 1,500문항) | 51.40 | 42.73 | 47.73 | 47.00 | `results/test_eval/` |
+| MMMU-Pro (같은 577문항)* | 42.63 | 27.21 | 42.63 | 36.22 | `results/mmmu_pro/` |
+
+\* MMMU-Pro는 세 모델 모두 형식 사양 프롬프트 하나로 평가해서 학습 전 기준선이 하나다 (greedy, 공식 `evaluate.py`).
+
+- A군(답만 학습)은 세 벤치마크 모두에서 학습 전보다 떨어진다.
+- B군(풀이 학습)은 A군보다 일관되게 높다 (test +4.27%p, Pro +9.01%p).
+- B군은 lr 2e-5 재학습에서 학습 전 조건 B보다 +2.81%p (seed 흔들림 ±2.0 수준이라 추가 확인 필요).
+- 형식 사양은 학습됨: 조건 B 잘림 30~36% → SFT 후 0~1.6%.
 
 ## 한계
 
